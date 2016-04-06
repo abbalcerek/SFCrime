@@ -10,4 +10,8 @@ def data_path(path=""):
 
 def setup():
     import pandas as pd
+    import warnings
     pd.set_option('expand_frame_repr', False)
+    pd.options.mode.chained_assignment = None
+    warnings.simplefilter(action="ignore", category=FutureWarning)
+    warnings.filterwarnings('ignore')

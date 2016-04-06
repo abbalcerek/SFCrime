@@ -1,8 +1,11 @@
 from sklearn.metrics import accuracy_score, log_loss
 from sklearn.preprocessing import MultiLabelBinarizer
 from collections import Counter
+
+from src.submission import create_submission
 from src.utils import data_path, setup
 import pandas as pd
+import numpy as np
 
 setup()
 
@@ -39,11 +42,10 @@ predicted_b = mlb.transform(to_singleton(predicted))
 for (clazz, count) in Counter(category).most_common():
     print("{}\t{}".format(clazz, count))
 
+# todo: use validation.py
 print("Accuracy on training: {}".format(accuracy_score(expected_b, predicted_b)))
 print("Log los on training: {}".format(log_loss(expected_b, predicted_b)))
 
-with open(data_path('baseline_sub.csv'), 'w') as f:
-    f.write("{},{}\n".format("id", ",".join(classes)))
-    for i in range(submission_size):
-        f.write("{},{}\n".format(str(i), ",".join([str(j) for j in predicted_b[0]])))
+test_prediction = np.full((submission_size, len(predicted_b[0])), predicted_b[0])
+create_submission(test_prediction, 'baseline_sub.csv')
 
