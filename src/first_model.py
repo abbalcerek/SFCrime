@@ -4,7 +4,7 @@ from collections import Counter
 from src.utils import data_path, setup
 import pandas as pd
 
-setup()
+setup(pd)
 
 # for now only dates, day of week, pd district, resolution, x, y
 
@@ -48,3 +48,11 @@ label_transformed = result.filter(regex="^Category")
 
 print(train_transformed.columns)
 print(label_transformed.columns)
+
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.svm import LinearSVC
+
+clf = OneVsRestClassifier(LinearSVC(random_state=0))
+train_prediction = clf.fit(train_transformed, label_transformed).predict(train_transformed)
+
+print(train_prediction.shape)

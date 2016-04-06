@@ -8,10 +8,11 @@ def data_path(path=""):
     return join(DATA_PATH, path)
 
 
-def setup():
-    import pandas as pd
+def setup(pd):
+    # import pandas as pd
     import warnings
     pd.set_option('expand_frame_repr', False)
     pd.options.mode.chained_assignment = None
     warnings.simplefilter(action="ignore", category=FutureWarning)
+    warnings.simplefilter(action="ignore", category=UserWarning)
     warnings.filterwarnings('ignore')
