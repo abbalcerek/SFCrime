@@ -7,7 +7,7 @@ from src.utils import data_path, setup
 import pandas as pd
 import numpy as np
 
-setup()
+setup(pd)
 
 
 def to_singleton(iterable):

@@ -43,8 +43,11 @@ train_transformed, label_transformed = transform_set('train.csv')
 print(train_transformed.columns)
 print(label_transformed.columns)
 
-clf = OneVsRestClassifier(LogisticRegression(random_state=0))
-train_prediction = clf.fit(train_transformed, label_transformed).predict(train_transformed)
+# clf = OneVsRestClassifier(LogisticRegression(random_state=0))
+from sklearn.ensemble import RandomForestClassifier
+clf = RandomForestClassifier(max_depth=10)
+clf.fit(train_transformed, label_transformed)
+# train_prediction = clf.predict(train_transformed)
 
 # mkdirs(data_path('serialized/model1/'))
 # joblib.dump(clf, data_path('serialized/model1/model1.pkl'))
@@ -53,9 +56,23 @@ train_prediction = clf.fit(train_transformed, label_transformed).predict(train_t
 
 test_transformed, _ = transform_set("test.csv", train=False)
 
-print("-=======================================")
+print("=======================================")
+
 
 test_prediction = clf.predict_proba(test_transformed)
-create_submission(test_prediction, "submission1.csv")
+print(test_prediction[0])
 
 
+print(sum([t[0][0] for t in test_prediction]))
+print(sum([t[0][1] for t in test_prediction]))
+
+reshaped = [[t[i][1] for t in test_prediction] for i in range(len(test_prediction[0]))]
+
+print(reshaped)
+
+
+print(len(test_prediction), test_prediction[0].shape)
+create_submission(reshaped, "submission12.csv")
+
+
+# score on kaggle = 2.60553
