@@ -13,13 +13,15 @@ from sklearn.svm import LinearSVC
 
 
 setup(pd)
-# for now only dates, day of week, pd district, resolution, x, y
+# for now only dates, day of week, pd district, x, y
 
 
 def transform_set(name, train=True):
     train_path = data_path(name)
     train_frame = pd.read_csv(train_path)
-    if train: del train_frame['Descript']
+    if train:
+        del train_frame['Descript']
+        del train_frame['Resolution']
     del train_frame['Address']
 
     train_frame['X'] = normalize_features(train_frame['X'])
@@ -36,29 +38,6 @@ def transform_set(name, train=True):
 
     return train_transformed, label_transformed
 
-# train_path = data_path('train.csv')
-# train_frame = pd.read_csv(data_path('train.csv'))
-#
-# del train_frame['Descript']
-# del train_frame['Address']
-#
-# train_frame['X'] = normalize_features(train_frame['X'])
-# train_frame['Y'] = normalize_features(train_frame['Y'])
-# train_frame['Dates'] = train_frame['Dates'].apply(transform_normalized_time)
-#
-# transformer = OneHotTransformer(categorical(train_frame), train_frame.columns)
-#
-# transformer.fit(train_frame)
-# result = transformer.transform_frame(train_frame)
-#
-# print(result.shape)
-#
-# print(result.dtypes)
-# print("========================================")
-# not_regex = "^Dates|^PdDistrict|^DayOfWeek|^Resolution|^X|^Y"
-# train_transformed = result.filter(regex=not_regex)
-# label_transformed = result.filter(regex="^Category")
-
 train_transformed, label_transformed = transform_set('train.csv')
 
 print(train_transformed.columns)
@@ -70,17 +49,11 @@ train_prediction = clf.fit(train_transformed, label_transformed).predict(train_t
 # mkdirs(data_path('serialized/model1/'))
 # joblib.dump(clf, data_path('serialized/model1/model1.pkl'))
 
-# print(train_prediction.shape)
-# print(cross_validation(clf, train_transformed, label_transformed))
-
-
 test_transformed, _ = transform_set("test.csv", train=False)
 
-print(test_transformed.columns)
-print(train_transformed.columns)
+print("-=======================================")
 
-test_prediction = clf.predict(test_transformed)
-print(test_prediction.shape)
-create_submission(clf.predict(test_transformed), "submission1.csv")
+test_prediction = clf.predict_proba(test_transformed)
+create_submission(test_prediction, "submission1.csv")
 
 
