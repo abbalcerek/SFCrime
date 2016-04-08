@@ -49,6 +49,8 @@ train_prediction = clf.fit(train_transformed, label_transformed).predict(train_t
 # mkdirs(data_path('serialized/model1/'))
 # joblib.dump(clf, data_path('serialized/model1/model1.pkl'))
 
+# print(cross_validation(clf, train_transformed, label_transformed))
+
 test_transformed, _ = transform_set("test.csv", train=False)
 
 print("-=======================================")
