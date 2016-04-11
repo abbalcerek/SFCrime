@@ -34,7 +34,8 @@ def transform_set(name, train=True):
     del train_frame['Address']
     if not train: del train_frame['Id']
 
-    train_frame[['X', 'Y']] = transform_coordinates(train_frame[['X', 'Y']])
+    train_frame['X'] = normalize_features(train_frame['X'])
+    train_frame['Y'] = normalize_features(train_frame['Y'])
     train_frame['Times'] = train_frame['Dates'].apply(transform_normalized_time)
     # train_frame = transform_address(train_frame)
     print(train_frame)
@@ -85,21 +86,23 @@ test_transformed, _ = transform_set("test.csv", train=False)
 
 result_list = []
 
-for dep in [15]:
-    for num in [25, 30, 35, 40, 50]:
-        print('starting testing classfier for depth={} and number of trees={}'.format(dep, num))
-        result_list.append((num, dep, run_class(dep, num, train_transformed, labels, test_transformed)))
-#
-#
-with open(data_path("evaluation.txt"), 'a') as f:
-    for i in range(len(result_list)):
-        res = result_list[i]
-        if i == 0: f.write(res[2][2] + '\n')
-        f.write('random forests {} trees, {} depth - {} {}'.format(res[0], res[1], res[2][0], res[2][1]) + '\n')
-    f.write('\n')
+# for dep in [15]:
+#     for num in [25, 30, 35, 40, 50]:
+#         print('starting testing classfier for depth={} and number of trees={}'.format(dep, num))
+#         result_list.append((num, dep, run_class(dep, num, train_transformed, labels, test_transformed)))
+# #
+# #
+# with open(data_path("evaluation.txt"), 'a') as f:
+#     for i in range(len(result_list)):
+#         res = result_list[i]
+#         if i == 0: f.write(res[2][2] + '\n')
+#         f.write('random forests {} trees, {} depth - {} {}'.format(res[0], res[1], res[2][0], res[2][1]) + '\n')
+#     f.write('\n')
 
 # max 15 35 on my machine
 # run_class(15, 45, train_transformed, labels, test_transformed, evaluate=False, file_name='submission5.csv')
+
+
 
 # for res in result_list:
 #     print(res)
