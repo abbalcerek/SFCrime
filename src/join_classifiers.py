@@ -16,3 +16,10 @@ classifiers_outputs_train = ['test1.pkl']
 def create_dataset(paths):
     frames = [pd.read_csv(data_path(path)) for path in paths]
     return pd.concat(frames, axis=1)
+
+
+train_set = create_dataset(classifiers_outputs_train)
+train_set.to_csv('join_train.csv')
+
+test_set = create_dataset(classifiers_outputs_test)
+test_set.to_csv('join_test.csv')
