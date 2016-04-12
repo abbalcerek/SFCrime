@@ -28,8 +28,8 @@ def transform_data_to(name):
 
     def transform(date):
         date_time = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
-        year, month = str(date_time.year), str(date_time.month)
-        if name == 'year': return year
+        year, month = float(date_time.year), str(date_time.month)
+        if name == 'year': return (year - 2003) / 12.
         if name == 'month': return month
         if name == 'day':
             return str(date_time.weekday())
